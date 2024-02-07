@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
+import 'package:fresh_basket/routes/routes_manage.dart';
 
 import '../../../common/common_sizebox.dart';
 import 'common_textfield_signin.dart';
@@ -100,7 +101,11 @@ class _SignInBodyState extends State<SignInBody> {
               ElevatedButton(onPressed: () {
                 print("Email ----->  ${_emailController.text}");
                 print("Password ------>  ${_passwordController.text}");
-              }, child: const Text("Sign in "))
+              }, child: const Text("Sign in "),),
+
+              TextButton(onPressed: () {
+Navigator.pushNamed(context, AppRoutes.signUpScreen);
+              }, child: Text("SignUp "))
             ],
           ),
         ),
