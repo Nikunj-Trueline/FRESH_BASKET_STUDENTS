@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
 import 'package:fresh_basket/routes/routes_manage.dart';
 
 import '../../../common/common_sizebox.dart';
 import 'common_textfield_signin.dart';
+import 'custom_buttons.dart';
 
 class SignInBody extends StatefulWidget {
   const SignInBody({super.key});
@@ -28,12 +30,16 @@ class _SignInBodyState extends State<SignInBody> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Image(
-                image: const AssetImage("assets/images/sign_in_image.jpg"),
-                height: MediaQueryHelper.height * 300,
-                width: MediaQueryHelper.width * 250,
-              ),
               commonSizeBox(height: MediaQueryHelper.height * 30),
+              SizedBox(
+                height: MediaQueryHelper.height * 230,
+                width: MediaQueryHelper.width * 470,
+                child: const Image(
+                  fit: BoxFit.cover,
+                  image: AssetImage("assets/images/sign_in_image.jpg"),
+                ),
+              ),
+              commonSizeBox(height: MediaQueryHelper.height * 10),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -57,7 +63,7 @@ class _SignInBodyState extends State<SignInBody> {
                   ),
                 ],
               ),
-              commonSizeBox(height: MediaQueryHelper.height * 30),
+              commonSizeBox(height: MediaQueryHelper.height * 40),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -75,7 +81,7 @@ class _SignInBodyState extends State<SignInBody> {
                 iconForSuffix: Icons.email,
                 onTap: () {},
               ),
-              commonSizeBox(height: MediaQueryHelper.height * 10),
+              commonSizeBox(height: MediaQueryHelper.height * 20),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -92,20 +98,57 @@ class _SignInBodyState extends State<SignInBody> {
                 controller: _passwordController,
                 iconForSuffix:
                     status == true ? Icons.visibility : Icons.visibility_off,
-                 onTap: () {
+                onTap: () {
                   setState(() {
                     status = !status;
                   });
                 },
               ),
-              ElevatedButton(onPressed: () {
-                print("Email ----->  ${_emailController.text}");
-                print("Password ------>  ${_passwordController.text}");
-              }, child: const Text("Sign in "),),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  customTextButtonForForgot(
+                    onPressed: () {},
+                    data: "Forgot Password?",
+                    fontSize: 20,
+                  )
+                ],
+              ),
+              commonSizeBox(
+                height: MediaQueryHelper.height * 40,
+              ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  customButtonForSignIn(
+                      onPressed: () {
+                        if (kDebugMode) {
+                          print(_emailController.text.toString());
+                          print(_passwordController.text.toString());
+                        }
+                      },
+                      fontSize: 26,
+                      fontWeight: FontWeight.w800,
+                      text: 'Sign In'),
+                ],
+              ),
+              commonSizeBox(
+                height: MediaQueryHelper.height * 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
 
-              TextButton(onPressed: () {
-Navigator.pushNamed(context, AppRoutes.signUpScreen);
-              }, child: Text("SignUp "))
+                  const Text("Don't have an account? ",style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600)),
+                  customTextButtonForSignUp(
+                      data: "Sign Up",
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.signUpScreen);
+                      },
+                      color: Colors.amber,
+                      fontSize: 24)
+                ],
+              )
             ],
           ),
         ),

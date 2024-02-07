@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../common/common_sizebox.dart';
 import '../../../common/heading_textstyle.dart';
 import '../../../mediaquery/mediaqueryhelper.dart';
@@ -16,10 +15,13 @@ class LayoutHeader extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: const AssetImage("assets/images/sign_in_image.jpg"),
+            Container(
               height: MediaQueryHelper.height * 180,
-              width: MediaQueryHelper.width * 460,
+              width: MediaQueryHelper.width * 400,
+              child: const Image(
+                fit: BoxFit.cover,
+                image: AssetImage("assets/images/sign_in_image.jpg"),
+              ),
             ),
           ],
         ),

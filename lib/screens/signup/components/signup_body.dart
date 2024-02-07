@@ -18,29 +18,21 @@ class _SignUpBodyState extends State<SignUpBody> {
       // backgroundColor: Colors.yellow,
       appBar: AppBar(),
       body: ListView(
-
-
         children: [
           Container(
-            // color: Colors.deepPurple,
             height: MediaQueryHelper.height * 310,
             width: MediaQueryHelper.width * double.infinity,
-            //  color: Colors.yellow,
-            margin: EdgeInsets.all(10),
-            child: LayoutHeader(),
+            margin: const EdgeInsets.all(10),
+            child: const LayoutHeader(),
           ),
-          Container(
-            height: MediaQueryHelper.height * 470,
-           // height:  300,
-            width: MediaQueryHelper.width * double.infinity,
-         
-         
-            child: SignUpForm()
+          SizedBox(
+              height: MediaQueryHelper.height * 470,
+              width: MediaQueryHelper.width * double.infinity,
+              //child: const SignUpForm(),
           ),
-          Container(
+          SizedBox(
             height: MediaQueryHelper.height * 80,
             width: MediaQueryHelper.width * double.infinity,
-            //color: Colors.blue,
             child: footerForSignUpForm(),
           )
         ],
