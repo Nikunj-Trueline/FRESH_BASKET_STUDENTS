@@ -6,6 +6,7 @@ TextFormField commonTextFieldForSignInField({
   IconData? iconForSuffix,
   TextEditingController? controller,
   required bool status,
+  String? errorText
 }) {
   return TextFormField(
     cursorHeight: 32,
@@ -16,6 +17,7 @@ TextFormField commonTextFieldForSignInField({
     obscureText: status,
    // style: textStyleForTextFormField(),
     decoration: InputDecoration(
+      errorText: errorText,
       suffixIcon: IconButton(
         icon: Icon(
           iconForSuffix,

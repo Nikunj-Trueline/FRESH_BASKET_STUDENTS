@@ -28,7 +28,7 @@ class _SignUpBodyState extends State<SignUpBody> {
           SizedBox(
               height: MediaQueryHelper.height * 470,
               width: MediaQueryHelper.width * double.infinity,
-              //child: const SignUpForm(),
+              child: const SignUpForm(),
           ),
           SizedBox(
             height: MediaQueryHelper.height * 80,
