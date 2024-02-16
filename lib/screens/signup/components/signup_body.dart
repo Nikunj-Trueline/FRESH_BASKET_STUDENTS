@@ -33,7 +33,7 @@ class _SignUpBodyState extends State<SignUpBody> {
           SizedBox(
             height: MediaQueryHelper.height * 80,
             width: MediaQueryHelper.width * double.infinity,
-            child: footerForSignUpForm(),
+            child: footerForSignUpForm(context: context),
           )
         ],
       ),

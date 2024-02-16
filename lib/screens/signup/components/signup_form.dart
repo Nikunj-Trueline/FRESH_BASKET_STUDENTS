@@ -25,6 +25,7 @@ class _SignUpFormState extends State<SignUpForm> {
       userType = '',
       address = '';
 
+  final dobController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -295,12 +296,22 @@ class _SignUpFormState extends State<SignUpForm> {
     return TextFormField(
       cursorHeight: 32,
       cursorWidth: 3,
+      controller: dobController,
       cursorColor: Colors.amber.shade700,
-      onTap: () {},
+      onTap: () {
+        datePiker();
+      },
       onSaved: (newValue) {},
       decoration: decorationForTextFormField(
         labelText: "Date of Birth",
-        suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/calendar.svg')
+        suffixIcon: InkWell(
+          onTap: () {
+
+            FocusScope.of(context).requestFocus(FocusNode());
+            datePiker();
+          },
+          child: CustomSuffixIcon(svgIconPath: 'assets/icons/calendar.svg'),
+        )
       ),
     );
   }
@@ -361,4 +372,22 @@ suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')
       ),
     );
   }
+
+  Future<void> datePiker() async {
+
+    DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2100));
+
+       if(pickedDate!=null)
+         {
+         dob = "${pickedDate.day.toString()} - ${pickedDate.month.toString()} - ${pickedDate.year.toString()}";
+           dobController.text = dob;
+         }
+
+       //  01-01-2024
+}
 }

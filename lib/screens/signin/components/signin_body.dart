@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
+import 'package:fresh_basket/preference/shared_preference.dart';
 import 'package:fresh_basket/routes/routes_manage.dart';
 import 'package:fresh_basket/utils/utils.dart';
 
@@ -145,7 +146,13 @@ class _SignInBodyState extends State<SignInBody> {
                           });
                         } else {
                           // navigate to next screen
+
+
+                        PreferenceServices.setData(key: PreferenceServices.isLoginKey, value: true);
+
+                      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.homeScreen, (route) => false);
                           print("All Done...");
+
                         }
                       },
                       fontSize: 26,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fresh_basket/common/common_sizebox.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
 import 'package:fresh_basket/model/onborading_model.dart';
+import 'package:fresh_basket/preference/shared_preference.dart';
 import 'package:fresh_basket/routes/routes_manage.dart';
 import 'package:fresh_basket/screens/onboarding/components/custom_row.dart';
 import '../../../constant/gradient.dart';
@@ -95,6 +96,9 @@ class _OnBoardingBodyState extends State<OnBoardingBody> {
                         currentIndex++;
                         _pageViewController.animateToPage(currentIndex, duration: const Duration(milliseconds: 300), curve: Curves.linear);
                       }else{
+
+                        PreferenceServices.setData(key: PreferenceServices.onboardingKey, value: true);
+
                         Navigator.pushReplacementNamed(context, AppRoutes.signInScreen);
                       }
                     });

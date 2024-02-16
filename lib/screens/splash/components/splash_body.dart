@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/constant/gradient.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
+import 'package:fresh_basket/preference/shared_preference.dart';
 import 'package:fresh_basket/routes/routes_manage.dart';
 
 class SplashBody extends StatefulWidget {
@@ -15,7 +16,17 @@ class _SplashBodyState extends State<SplashBody> {
   @override
   void initState() {
     Timer(const Duration(seconds: 3), () {
-      Navigator.pushReplacementNamed(context, AppRoutes.onBoardingScreen);
+      if (PreferenceServices.getBoolData(key: PreferenceServices.isLoginKey)) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.homeScreen, (route) => false);
+      } else {
+        if (PreferenceServices.getBoolData(
+            key: PreferenceServices.onboardingKey)) {
+          Navigator.pushReplacementNamed(context, AppRoutes.signInScreen);
+        } else {
+          Navigator.pushReplacementNamed(context, AppRoutes.onBoardingScreen);
+        }
+      }
     });
     super.initState();
   }

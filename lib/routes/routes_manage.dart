@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fresh_basket/screens/home/home_screen.dart';
 import 'package:fresh_basket/screens/signin/signin_screen.dart';
 import 'package:fresh_basket/screens/signup/signup_screen.dart';
 import 'package:fresh_basket/screens/splash/splash_screen.dart';
@@ -9,6 +10,7 @@ class AppRoutes {
   static const onBoardingScreen = '/onBoarding';
   static const signInScreen = '/signInScreen';
   static const signUpScreen = '/signUpScreen';
+  static const homeScreen = '/homeScreen';
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -30,6 +32,11 @@ class AppRoutes {
       case signUpScreen:
         return MaterialPageRoute(
           builder: (context) => const SignUpScreen(),
+        );
+
+      case homeScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
         );
     }
 
