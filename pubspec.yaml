@@ -36,6 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons:
   flutter_svg:
+  shared_preferences: 
 
 
 dev_dependencies:
