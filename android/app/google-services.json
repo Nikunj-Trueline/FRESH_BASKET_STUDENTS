@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1038016677094",
+    "project_id": "fresh-basket-6595d",
+    "storage_bucket": "fresh-basket-6595d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1038016677094:android:050def634d87a15f1a6727",
+        "android_client_info": {
+          "package_name": "com.example.fresh_basket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpobY8CdOAA-NG-cv3obfK1Q9_JDYRNHw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
