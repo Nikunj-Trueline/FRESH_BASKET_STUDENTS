@@ -1,10 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/common/common_sizebox.dart';
 import 'package:fresh_basket/utils/utils.dart';
 import '../../../common/custom_suffix_icon.dart';
 import '../../../mediaquery/mediaqueryhelper.dart';
+import '../../../preference/shared_preference.dart';
+import '../../../routes/routes_manage.dart';
 import 'common_textfield_decoration.dart';
+import 'custom_elevated_button.dart';
 
 class SignUpForm extends StatefulWidget {
   const SignUpForm({super.key});
@@ -14,7 +18,6 @@ class SignUpForm extends StatefulWidget {
 }
 
 class _SignUpFormState extends State<SignUpForm> {
-
   String gender = 'male',
       dob = '',
       fName = '',
@@ -24,6 +27,9 @@ class _SignUpFormState extends State<SignUpForm> {
       password = '',
       userType = '',
       address = '';
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   final dobController = TextEditingController();
 
@@ -71,10 +77,43 @@ class _SignUpFormState extends State<SignUpForm> {
               commonSizeBox(
                 height: MediaQueryHelper.height * 16,
               ),
+              //-------------------------
+              footerForSignUpForm(),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget footerForSignUpForm() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 5, right: 10, left: 10),
+      child: customButtonForSignUp(
+          data: "Sign Up",
+          onPressed: () {
+            // print('''
+            // fName : $fName
+            // lName : $lName
+            // email : $email
+            // password : $password
+            //            ''');
+
+            String email = _emailController.text.toString().trim();
+            String password = _passwordController.text.toString().trim();
+
+            createAccount(email, password, context);
+
+            // PreferenceServices.setData(
+            //     key: PreferenceServices.isLoginKey, value: true);
+            //
+            Navigator.pushNamedAndRemoveUntil(
+                context, AppRoutes.homeScreen, (route) => false);
+          },
+          color: Colors.white,
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 1),
     );
   }
 
@@ -88,12 +127,10 @@ class _SignUpFormState extends State<SignUpForm> {
             cursorWidth: 3,
             cursorColor: Colors.amber.shade700,
             validator: (value) {
-
-                if (value == null || value.isEmpty) {
-                  return 'Please enter First name';
-                }
-                return null;
-
+              if (value == null || value.isEmpty) {
+                return 'Please enter First name';
+              }
+              return null;
             },
             onSaved: (newValue) {
               fName = newValue.toString();
@@ -112,17 +149,12 @@ class _SignUpFormState extends State<SignUpForm> {
             cursorHeight: 32,
             cursorWidth: 3,
             validator: (value) {
-
               if (value == null || value.isEmpty) {
                 return 'Please enter Last name';
               }
               return null;
-
             },
-            onChanged: (value)
-            {
-
-            },
+            onChanged: (value) {},
             cursorColor: Colors.amber.shade700,
             keyboardType: TextInputType.name,
             decoration: decorationForTextFormField(
@@ -136,21 +168,22 @@ class _SignUpFormState extends State<SignUpForm> {
 
   buildEmailFormField() {
     return TextFormField(
+      controller: _emailController,
       cursorHeight: 32,
       cursorWidth: 3,
       keyboardType: TextInputType.emailAddress,
       cursorColor: Colors.amber.shade700,
       validator: (value) {
-
         if (value == null || value.isEmpty || !Utils.isValidEmail(value)) {
           return 'Please enter valid email';
         }
         return null;
-
       },
       decoration: decorationForTextFormField(
         labelText: "Enter Email",
-        suffixIcon: const CustomSuffixIcon(svgIconPath: 'assets/icons/email.svg',),
+        suffixIcon: const CustomSuffixIcon(
+          svgIconPath: 'assets/icons/email.svg',
+        ),
       ),
     );
   }
@@ -162,12 +195,10 @@ class _SignUpFormState extends State<SignUpForm> {
       cursorColor: Colors.amber.shade700,
       keyboardType: TextInputType.number,
       validator: (value) {
-
         if (value == null || value.isEmpty || !Utils.isContactValid(value)) {
           return 'Please enter valid number';
         }
         return null;
-
       },
       onChanged: (value) {
         if (kDebugMode) {
@@ -175,9 +206,9 @@ class _SignUpFormState extends State<SignUpForm> {
         }
       },
       decoration: decorationForTextFormField(
-        labelText: "Contact",
-        suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/phone-call.svg')
-      ),
+          labelText: "Contact",
+          suffixIcon:
+              CustomSuffixIcon(svgIconPath: 'assets/icons/phone-call.svg')),
     );
   }
 
@@ -201,7 +232,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   activeColor: Colors.amber,
                   onChanged: (value) {
                     setState(() {
-                        gender = value.toString();
+                      gender = value.toString();
                     });
                   },
                 ),
@@ -284,10 +315,9 @@ class _SignUpFormState extends State<SignUpForm> {
             style: TextStyle(fontSize: 20, color: Colors.black),
           ),
         ),
-
       ],
       onChanged: (value) {
-       print(value);
+        print(value);
       },
     );
   }
@@ -303,16 +333,14 @@ class _SignUpFormState extends State<SignUpForm> {
       },
       onSaved: (newValue) {},
       decoration: decorationForTextFormField(
-        labelText: "Date of Birth",
-        suffixIcon: InkWell(
-          onTap: () {
-
-            FocusScope.of(context).requestFocus(FocusNode());
-            datePiker();
-          },
-          child: CustomSuffixIcon(svgIconPath: 'assets/icons/calendar.svg'),
-        )
-      ),
+          labelText: "Date of Birth",
+          suffixIcon: InkWell(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              datePiker();
+            },
+            child: CustomSuffixIcon(svgIconPath: 'assets/icons/calendar.svg'),
+          )),
     );
   }
 
@@ -331,25 +359,25 @@ class _SignUpFormState extends State<SignUpForm> {
 
   buildPasswordFormField() {
     return TextFormField(
+        controller: _passwordController,
         cursorHeight: 32,
         cursorWidth: 3,
         cursorColor: Colors.amber.shade700,
         keyboardType: TextInputType.text,
         obscureText: true,
         validator: (value) {
-
           if (value == null || value.isEmpty || !Utils.isValidPassword(value)) {
             return 'Please enter valid password';
           }
           return null;
-
         },
         onSaved: (newValue) {
           password = newValue.toString();
         },
-        decoration: decorationForTextFormField(labelText: "Password",
-suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')
-        ));
+        decoration: decorationForTextFormField(
+            labelText: "Password",
+            suffixIcon:
+                CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')));
   }
 
   buildConfirmPasswordFormField() {
@@ -360,12 +388,10 @@ suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (value) {
-
-        if (value == null || value!=password) {
+        if (value == null || value != password) {
           return 'Please enter valid password';
         }
         return null;
-
       },
       decoration: decorationForTextFormField(
         labelText: 'Confirm Password',
@@ -374,7 +400,6 @@ suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')
   }
 
   Future<void> datePiker() async {
-
     DateTime? pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -382,12 +407,36 @@ suffixIcon: CustomSuffixIcon(svgIconPath: 'assets/icons/lock.svg')
         //DateTime.now() - not to allow to choose before today.
         lastDate: DateTime(2100));
 
-       if(pickedDate!=null)
-         {
-         dob = "${pickedDate.day.toString()} - ${pickedDate.month.toString()} - ${pickedDate.year.toString()}";
-           dobController.text = dob;
-         }
+    if (pickedDate != null) {
+      dob =
+          "${pickedDate.day.toString()} - ${pickedDate.month.toString()} - ${pickedDate.year.toString()}";
+      dobController.text = dob;
+    }
 
-       //  01-01-2024
-}
+    //  01-01-2024
+  }
+
+  Future<void> createAccount(
+      String email, String password, BuildContext context) async {
+    try {
+      final credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (credential.user != null) {
+        print("UID : ${credential.user!.uid}");
+        print("EMAIL : ${credential.user!.email}");
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        print('The password provided is too weak.');
+      } else if (e.code == 'email-already-in-use') {
+        print('The account already exists for that email.');
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
 }

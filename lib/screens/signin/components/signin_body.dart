@@ -1,7 +1,6 @@
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
-import 'package:fresh_basket/preference/shared_preference.dart';
 import 'package:fresh_basket/routes/routes_manage.dart';
 import 'package:fresh_basket/utils/utils.dart';
 
@@ -147,12 +146,12 @@ class _SignInBodyState extends State<SignInBody> {
                         } else {
                           // navigate to next screen
 
+                          signInUser(email, password, context);
 
-                        PreferenceServices.setData(key: PreferenceServices.isLoginKey, value: true);
-
-                      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.homeScreen, (route) => false);
+                          //   PreferenceServices.setData(key: PreferenceServices.isLoginKey, value: true);
+                          //
+                          // Navigator.pushNamedAndRemoveUntil(context, AppRoutes.homeScreen, (route) => false);
                           print("All Done...");
-
                         }
                       },
                       fontSize: 26,
@@ -190,5 +189,24 @@ class _SignInBodyState extends State<SignInBody> {
       emailError = null;
       passwordError = null;
     });
+  }
+
+  Future<void> signInUser(
+      String email, String password, BuildContext context) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+
+      if (credential.user != null) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, AppRoutes.homeScreen, (route) => false);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 }

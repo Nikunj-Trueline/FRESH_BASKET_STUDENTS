@@ -11,6 +11,11 @@ class AppRoutes {
   static const signInScreen = '/signInScreen';
   static const signUpScreen = '/signUpScreen';
   static const homeScreen = '/homeScreen';
+  static const shopScreen = '/shopScreen';
+  static const cartScreen = '/cartScreen';
+  static const exploreScreen = '/exploreScreen';
+  static const favouriteScreen = '/favouriteScreen';
+  static const accountScreen = '/accountScreen';
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -35,6 +40,31 @@ class AppRoutes {
         );
 
       case homeScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        );
+
+      case shopScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        );
+
+      case cartScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        );
+
+      case exploreScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        );
+
+      case favouriteScreen:
+        return MaterialPageRoute(
+          builder: (context) => const HomeScreen(),
+        );
+
+      case accountScreen:
         return MaterialPageRoute(
           builder: (context) => const HomeScreen(),
         );

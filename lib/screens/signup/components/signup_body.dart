@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/mediaquery/mediaqueryhelper.dart';
 import 'package:fresh_basket/screens/signup/components/signup_form.dart';
+import '../../../preference/shared_preference.dart';
+import '../../../routes/routes_manage.dart';
+import 'custom_elevated_button.dart';
 import 'footer.dart';
 import 'header_signup.dart';
 
@@ -26,15 +29,15 @@ class _SignUpBodyState extends State<SignUpBody> {
             child: const LayoutHeader(),
           ),
           SizedBox(
-              height: MediaQueryHelper.height * 470,
-              width: MediaQueryHelper.width * double.infinity,
-              child: const SignUpForm(),
-          ),
-          SizedBox(
-            height: MediaQueryHelper.height * 80,
+            height: MediaQueryHelper.height * 470,
             width: MediaQueryHelper.width * double.infinity,
-            child: footerForSignUpForm(context: context),
-          )
+            child: const SignUpForm(),
+          ),
+          // SizedBox(
+          //   height: MediaQueryHelper.height * 80,
+          //   width: MediaQueryHelper.width * double.infinity,
+          //   child: footerForSignUpForm(context: context, email: '', password: ''),
+          // )
         ],
       ),
     );
