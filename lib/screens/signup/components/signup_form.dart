@@ -1,12 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fresh_basket/common/common_sizebox.dart';
+import 'package:fresh_basket/firebase_service/firebase_servicies.dart';
+import 'package:fresh_basket/model/app_user_model.dart';
+import 'package:fresh_basket/routes/routes_manage.dart';
 import 'package:fresh_basket/utils/utils.dart';
 import '../../../common/custom_suffix_icon.dart';
 import '../../../mediaquery/mediaqueryhelper.dart';
 import '../../../preference/shared_preference.dart';
-import '../../../routes/routes_manage.dart';
 import 'common_textfield_decoration.dart';
 import 'custom_elevated_button.dart';
 
@@ -33,10 +34,15 @@ class _SignUpFormState extends State<SignUpForm> {
 
   final dobController = TextEditingController();
 
+  final _formKey = GlobalKey<FormState>();
+
+  FirebaseServices ref = FirebaseServices();
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Form(
+        key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Column(
@@ -92,23 +98,41 @@ class _SignUpFormState extends State<SignUpForm> {
       child: customButtonForSignUp(
           data: "Sign Up",
           onPressed: () {
-            // print('''
-            // fName : $fName
-            // lName : $lName
-            // email : $email
-            // password : $password
-            //            ''');
+            _formKey.currentState!.save();
 
-            String email = _emailController.text.toString().trim();
-            String password = _passwordController.text.toString().trim();
+            print('''
+            fName : $fName
+            lName : $lName
+            email : $email
+            password : $password
+            gender : $gender
+            contact : $contact
+            DOB : $dob
+            userType : $userType
+            Address : $address             
+                       ''');
 
-            createAccount(email, password, context);
+            var user = AppUser(
+                fName: fName,
+                lName: lName,
+                email: email,
+                userType: userType,
+                address: address,
+                contact: contact,
+                dob: dob,
+                gender: gender,
+                password: password);
+
+            createUserAccount(user, context);
+
+            // String email = _emailController.text.toString().trim();
+            // String password = _passwordController.text.toString().trim();
 
             // PreferenceServices.setData(
             //     key: PreferenceServices.isLoginKey, value: true);
             //
-            Navigator.pushNamedAndRemoveUntil(
-                context, AppRoutes.homeScreen, (route) => false);
+            // Navigator.pushNamedAndRemoveUntil(
+            //     context, AppRoutes.homeScreen, (route) => false);
           },
           color: Colors.white,
           fontSize: 24,
@@ -154,6 +178,9 @@ class _SignUpFormState extends State<SignUpForm> {
               }
               return null;
             },
+            onSaved: (newValue) {
+              lName = newValue.toString();
+            },
             onChanged: (value) {},
             cursorColor: Colors.amber.shade700,
             keyboardType: TextInputType.name,
@@ -179,6 +206,9 @@ class _SignUpFormState extends State<SignUpForm> {
         }
         return null;
       },
+      onSaved: (newValue) {
+        email = newValue.toString();
+      },
       decoration: decorationForTextFormField(
         labelText: "Enter Email",
         suffixIcon: const CustomSuffixIcon(
@@ -200,10 +230,8 @@ class _SignUpFormState extends State<SignUpForm> {
         }
         return null;
       },
-      onChanged: (value) {
-        if (kDebugMode) {
-          print(value);
-        }
+      onSaved: (newValue) {
+        contact = newValue.toString();
       },
       decoration: decorationForTextFormField(
           labelText: "Contact",
@@ -298,7 +326,9 @@ class _SignUpFormState extends State<SignUpForm> {
   buildUserTypeFormField() {
     return DropdownButtonFormField(
       iconEnabledColor: Colors.black,
-      onSaved: (newValue) {},
+      onSaved: (newValue) {
+        userType = newValue.toString();
+      },
       decoration: decorationForTextFormField(
         labelText: "User Type",
       ),
@@ -351,7 +381,9 @@ class _SignUpFormState extends State<SignUpForm> {
       cursorColor: Colors.amber.shade700,
       keyboardType: TextInputType.multiline,
       maxLines: 4,
-      onSaved: (newValue) {},
+      onSaved: (newValue) {
+        address = newValue.toString();
+      },
       decoration: decorationForTextFormField(
           labelText: "Address", alignLabelWithHint: true),
     );
@@ -416,7 +448,25 @@ class _SignUpFormState extends State<SignUpForm> {
     //  01-01-2024
   }
 
-  Future<void> createAccount(
+  Future<void> createUserAccount(AppUser user, BuildContext context) async {
+    var credential = await createAccount(user.email!, user.password!, context);
+
+    if (credential.user != null) {
+      if (credential is UserCredential) {
+        user.id = credential.user!.uid;
+
+        ref.createUser(user).then((value) {
+          PreferenceServices.setData(
+              key: PreferenceServices.isLoginKey, value: true);
+
+          Navigator.pushNamedAndRemoveUntil(
+              context, AppRoutes.homeScreen, (route) => false);
+        });
+      }
+    }
+  }
+
+  Future<dynamic> createAccount(
       String email, String password, BuildContext context) async {
     try {
       final credential =
@@ -426,14 +476,13 @@ class _SignUpFormState extends State<SignUpForm> {
       );
 
       if (credential.user != null) {
-        print("UID : ${credential.user!.uid}");
-        print("EMAIL : ${credential.user!.email}");
+        return credential;
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
+        return 'The password provided is too weak.';
       } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
+        return 'The account already exists for that email.';
       }
     } catch (e) {
       print(e);

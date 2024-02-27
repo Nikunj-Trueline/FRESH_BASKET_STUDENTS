@@ -39,6 +39,8 @@ dependencies:
   shared_preferences:
   firebase_auth:
   firebase_core:
+  firebase_database:
+
 
 
 dev_dependencies:
